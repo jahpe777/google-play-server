@@ -5,6 +5,10 @@ const apps = require('./playstore.js');
 const app = express();
 app.use(morgan('common'));
 
+const cors = require('cors');
+app.use(cors());
+
+
 app.get('/apps', (req, res) => {
     const { sort, genres } = req.query;
     let filtered_apps = apps
@@ -17,7 +21,7 @@ app.get('/apps', (req, res) => {
             && genres.toLowerCase() !== 'casual'
             && genres.toLowerCase() !== 'arcade'
             && genres.toLowerCase() !== 'card') {
-                return res.status(400).send('can only filter by Action, Puzzle, Strategy, Casual, Arcade, or Card');
+                return res.status(400).send('Can only filter by Action, Puzzle, Strategy, Casual, Arcade, or Card');
             }
             filtered_apps = apps.filter(app => {
                 return app.Genres.includes(genres.charAt(0).toUpperCase() + genres.slice(1));
@@ -46,6 +50,4 @@ app.get('/apps', (req, res) => {
     .json(filtered_apps);
     });
 
-app.listen(8000, () => {
-    console.log('Server started on PORT 8000');
-});
+module.exports = app;
